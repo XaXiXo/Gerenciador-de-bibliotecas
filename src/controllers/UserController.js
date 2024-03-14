@@ -2,12 +2,17 @@ const knex = require("../database/knex")
 
 class UserController {
     async createUser(req, res) {
-        const {name, email, telefone, datacadastro, livrosEmprestados = false} = req.body
+        const {nome, email, telefone} = req.body
 
-        await knex("users").insert({name, email, telefone, datacadastro, livrosEmprestados})
+        const user = {
+            nome,
+            email,
+            telefone
+        }
+        await knex("users").insert({nome, email, telefone})
     
 
-        res.status(201).json("Usuário cadastrado com sucesso")
+        res.status(201).json(user)
         
     }
     async listUsers( req, res) {
@@ -24,9 +29,9 @@ class UserController {
 
     async updateUser(req, res) {
         const {user_id} = req.params
-        const {name, email, telefone, datacadastro} = req.body
+        const {nome, email, telefone} = req.body
 
-        await knex("users").where({id: user_id}).update({name, email,telefone, datacadastro})
+        await knex("users").where({id: user_id}).update({nome, email,telefone})
         return res.status(200).json("Usuário atualizado com sucesso!")
     }
 

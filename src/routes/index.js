@@ -1,19 +1,12 @@
 const {Router} = require("express")
-const UserController = require("../controllers/UserController")
-const checkUserExists = require("../middlewares/checkUserExists")
+const userRoutes = require("./user.routes")
+const bookRoutes = require("./books.routes")
+const loanRoutes = require("./loans.routes")
 
-const userRoutes = Router()
+const routes = Router()
 
-const userController = new UserController()
+routes.use("/", userRoutes)
+routes.use("/", bookRoutes)
+routes.use("/", loanRoutes)
 
-userRoutes.post("/users", userController.createUser)
-
-userRoutes.get("/users", userController.listUsers)
-
-userRoutes.get("/users/:user_id", checkUserExists, userController.listUserById)
-
-userRoutes.put("/users/:user_id", checkUserExists, userController.updateUser)
-userRoutes.delete("/users/:user_id", checkUserExists, userController.deleteUser)
-userRoutes.patch("/users/admin/user_id", checkUserExists, userController.updateUserAdmin)
-
-module.exports = userRoutes
+module.exports = routes
