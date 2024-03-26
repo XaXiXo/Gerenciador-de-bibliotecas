@@ -1,13 +1,15 @@
 const {Router} = require("express")
 const LoansController = require("../controllers/EmprestimoController")
+const ensureAuthenticated = require("../middlewares/ensureAuthenticated")
 
 const loansRoutes = Router()
 const loansController = new LoansController()
 
-loansRoutes.post("/loan/:user_id/:book_id", loansController.borrowBooks)
+loansRoutes.use(ensureAuthenticated)
 
-loansRoutes.get("/loan/:user_id", loansController.listBorrowedBooks)
-loansRoutes.get("/loan/total/:user_id", loansController.totalBorrowedBooks)
-loansRoutes.patch("/loan/devolucao/:user_id/:book_id", loansController.returnBorrowedBooks)
+loansRoutes.post("/:user_id/:book_id", loansController.borrowBooks)
+loansRoutes.get("/:user_id", loansController.listBorrowedBooks)
+loansRoutes.get("/total/:user_id", loansController.totalBorrowedBooks)
+loansRoutes.patch("/devolucao/:user_id/:book_id", loansController.returnBorrowedBooks)
 
 module.exports = loansRoutes

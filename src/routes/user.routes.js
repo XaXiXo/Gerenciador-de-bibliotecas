@@ -1,19 +1,22 @@
 const {Router} = require("express")
 const UserController = require("../controllers/UserController")
 const checkUserExists = require("../middlewares/checkUserExist")
+const ensureAuthenticated = require("../middlewares/ensureAuthenticated")
 
 const userRoutes = Router()
 
 const userController = new UserController()
 
-userRoutes.post("/users", userController.createUser)
+userRoutes.post("/", userController.createUser)
 
-userRoutes.get("/users", userController.listUsers)
+userRoutes.use(ensureAuthenticated)
 
-userRoutes.get("/users/:user_id", checkUserExists, userController.listUserById)
+userRoutes.get("/", userController.listUsers)
 
-userRoutes.put("/users/:user_id", checkUserExists, userController.updateUser)
-userRoutes.delete("/users/:user_id", checkUserExists, userController.deleteUser)
+userRoutes.get("/:user_id", checkUserExists, userController.listUserById)
+
+userRoutes.put("/:user_id", checkUserExists, userController.updateUser)
+userRoutes.delete("/:user_id", checkUserExists, userController.deleteUser)
 
 
 module.exports = userRoutes

@@ -1,14 +1,17 @@
 const {Router} = require("express")
 const BookController = require("../controllers/BookController")
+const ensureAuthenticated = require("../middlewares/ensureAuthenticated")
 
 const bookRoutes = Router()
 
 const bookController = new BookController
 
-bookRoutes.post("/books", bookController.createBook)
-bookRoutes.get("/books", bookController.listBooks)
-bookRoutes.get("/books/:id", bookController.listBookById)
-bookRoutes.put("/books/:id", bookController.updateBook)
-bookRoutes.delete("/books/:id", bookController.deleteBook)
+bookRoutes.get("/", bookController.listBooks)
+bookRoutes.get("/:id", bookController.listBookById)
+
+bookRoutes.use(ensureAuthenticated)
+bookRoutes.post("/", bookController.createBook)
+bookRoutes.put("/:id", bookController.updateBook)
+bookRoutes.delete("/:id", bookController.deleteBook)
  
 module.exports = bookRoutes
